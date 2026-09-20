@@ -1,12 +1,16 @@
 ---
 name: arr-cli
 description: Use the arr-cli Python package to query a self-hosted media stack (Jellyfin / Radarr / Sonarr / Maintainerr / Seerr). Use it to find out what's currently playing, what's coming up, what's about to be deleted, and so on.
-metadata: {'openclaw': {'requires': {'bins': ['jellyfin', 'radarr', 'sonarr', 'maintainerr', 'seerr']}}}
+homepage: https://github.com/BottaniCals/arr-cli
+metadata:
+  {'openclaw': {'requires': {'bins': ['jellyfin', 'radarr', 'sonarr', 'maintainerr', 'seerr']}}}
 ---
 
 # arr-cli — read-only media-server CLI
 
-`arr-cli` is a single Python package that ships five thin CLI executables — `jellyfin`, `radarr`, `sonarr`, `maintainerr`, `seerr` — backed by one shared facade (`arr_cli.facade`) that owns config, HTTP, auth, error mapping, and output formatting. **Every command is an HTTP `GET`.** No write endpoints exist in MVP; the package cannot mutate the media stack.
+`arr-cli` is a single Python package that ships five thin CLI executables — `jellyfin`, `radarr`, `sonarr`, `maintainerr`, `seerr` — backed by one shared facade (`arr_cli.facade`) that owns config, HTTP, auth, error mapping, and output formatting. All five binaries can be installed from https://github.com/BottaniCals/arr-cli source.
+
+**Every command is an HTTP `GET`.** No write endpoints exist in MVP; the package cannot mutate the media stack.
 
 Two operators:
 
