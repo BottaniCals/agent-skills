@@ -1,6 +1,7 @@
 ---
 name: arr-cli
 description: Use the arr-cli Python package to query a self-hosted media stack (Jellyfin / Radarr / Sonarr / Maintainerr / Seerr). Use it to find out what's currently playing, what's coming up, what's about to be deleted, and so on.
+metadata: {'openclaw': {'requires': {'bins': ['jellyfin', 'radarr', 'sonarr', 'maintainerr', 'seerr']}}}
 ---
 
 # arr-cli — read-only media-server CLI
@@ -195,8 +196,7 @@ For canonical "what's in my library and what's monitored" use `sonarr --human se
 - **Maintainerr's `--quiet` matters.** Without it, every invocation spams a "no auth, private network only" warning to stderr. Default to `maintainerr --quiet <subcommand>` for cron / scripted use.
 - **`--debug` is loud and slow.** Full traceback + redacted request / response pair to stderr. Use for one-shot diagnosis, not in pipelines.
 - **`exit 2` is auth-only.** Argument-parse errors exit `1` (`ConfigError`) and append `service=config op=parse message=argument parse error (argparse exit 2)` to stderr. Universal flags work before or after the subcommand; both `jellyfin now --config X` and `jellyfin --config X now` are valid.
-- **Search-with-empty-query is not an error — and it's CLI-side.** `jellyfin search ""` (and `jellyfin search` with no positional) short-circuits to `[]` without calling `/Items`. Exit `0`, no `transport.get` fired. The same short-circuit applies to `radarr lookup ""` / `sonarr lookup ""` (was HTTP 503 from RadarrAPI / SkyHook before fix #71). Useful when chaining in scripts that may pass empty input.
-- **`seerr search` with reserved chars (spaces, `?`, `&`, `/`) short-circuits to `[]`.** Seer's openapi validator rejects the request even though `requests` percent-encodes the value on the wire (HTTP 400). To actually search a multi-word title, pre-URL-encode it yourself: `seerr search "doctor%20who"` returns 20 hits; `seerr search "doctor who"` returns `[]` with a stderr diagnostic. The CLI does NOT retry or auto-encode for you (would risk double-encoding on other endpoints per the `transport-params-double-encoded` contract).
+- **Search-with-empty-query is not an error — and it's CLI-side.** `jellyfin search ""` (and `jellyfin search` with no positional) short-circuits to `[]` without calling `/Items`. Exit `0`, no `transport.get` fired. Useful when chaining in scripts that may pass empty input.
 - **Seer endpoints are paginated by default.** `seerr requests`, `seerr search`, `seerr available`, `seerr trending`, `seerr upcoming-*`, and `seerr discover-*` all return `{page, totalPages, totalResults, results: [...]}` envelopes. The size-to-summary renderers unwrap `results` automatically; pass `--verbose` to see the full envelope. `seerr available` requests `take=1000` so a single response covers the household queue; queues above 1000 items would need a page-walking follow-up.
 - **`seerr discover-*` with no flags sends no defaults on the wire.** Pass `--sort` / `--language` explicitly when you need them. Trending / upcoming / search / genres already followed the omit-when-default rule and are unaffected.
 
