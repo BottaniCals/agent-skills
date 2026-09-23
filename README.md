@@ -8,6 +8,7 @@ go to [ClawHub](https://clawhub.ai).
 | Skill | Description |
 | ----- | ----------- |
 | [arr-cli](./skills/arr-cli) | Read-only CLI for Jellyfin / Radarr / Sonarr / Maintainerr / Seerr |
+| [forktree](./skills/forktree) | Stdlib-only Python CLI wrapping `git worktree` with safety pre-flights and a strict stdout/stderr contract |
 
 ## Layout
 
